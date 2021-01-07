@@ -45,4 +45,4 @@ Create NFS storage class in Kubernetes
 ```
 
 
-https://hub.docker.com/r/otopy/nfs-stor
+https://hub.docker.com/r/otopy/nfs-as-storage
