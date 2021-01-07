@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  namespace: test2
+spec:
+  volumes:
+    - name: nfs
+      persistentVolumeClaim:
+        claimName: pvc1
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "nginx-server"
+      volumeMounts:
+        - mountPath: "/mnt"
+          name: nfs

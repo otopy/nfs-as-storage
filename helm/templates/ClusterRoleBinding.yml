@@ -1,0 +1,19 @@
+{{- $AppName :=  .Values.appname -}}
+{{- $AppNameSpaces :=  .Values.appnamespaces -}}
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-{{ $AppName }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $AppName }}
+    namespace: {{ $AppNameSpaces }}
+roleRef:
+  kind: ClusterRole
+  name: {{ $AppName }}-runner
+  apiGroup: rbac.authorization.k8s.io
+  
+---

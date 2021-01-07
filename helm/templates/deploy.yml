@@ -1,0 +1,45 @@
+{{- $AppName :=  .Values.appname -}}
+{{- $AppReplicas := .Values.deployment.replicas -}}
+{{- $Appvolname :=  .Values.pods.nfs.volumes.name -}}
+{{- $Appvolserver :=  .Values.pods.nfs.volumes.nfs.server  -}}
+{{- $Appvolpath := .Values.pods.nfs.volumes.nfs.path  -}}
+
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ $AppName }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ $AppName }}
+  replicas: {{ $AppReplicas }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ $AppName }}
+    spec:
+      serviceAccountName: {{ $AppName }}
+      containers:
+        - name: {{ $AppName }}
+          image: {{ include "firstimage" . }}
+          volumeMounts:
+            - name: {{ $Appvolname }}
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: example.com/nfs
+            - name: NFS_SERVER
+              value: {{ $Appvolserver }}
+            - name: NFS_PATH
+              value: {{ $Appvolpath }}
+      volumes:
+        - name: {{ $Appvolname }}
+          nfs:
+            server: {{ $Appvolserver }}
+            path: {{ $Appvolpath }}
+---

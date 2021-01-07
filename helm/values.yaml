@@ -1,0 +1,17 @@
+appname: nfs-client-provisioner
+appnamespaces: default
+
+deployment:
+  replicas: 1
+
+pods:
+  nfs:
+    images:
+      registry: otopy
+      repository: nfs-stor
+      tag: latest
+    volumes:
+      name: nfs-client-root
+      nfs:
+        server: 192.168.99.108
+        path: /var/nfs
